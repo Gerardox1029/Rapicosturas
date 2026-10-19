@@ -93,6 +93,14 @@ Añadir las variables del cuadro anterior en el panel de Netlify. Si el plan per
 
 No basta con arrastrar `index.html` al hosting: esa modalidad no prepara la API. La publicación desde GitHub ejecuta la compilación y publica web, Functions y tarea programada en un único sitio. MongoDB y R2 siguen siendo servicios externos.
 
+### Si Netlify detiene la publicación por Secrets scanning
+
+El escaneo compara los valores marcados como secretos con todo el repositorio y la salida compilada. Un nombre de bucket, una ruta de carpeta o una dirección local pueden producir coincidencias aunque sean configuración pública. El `netlify.toml` incluye una excepción limitada mediante `SECRETS_SCAN_OMIT_KEYS` para `APP_ORIGIN`, `MONGODB_DB`, `R2_BUCKET`, `R2_TUTORIAL_PREFIX` y `R2_EVIDENCE_PREFIX`. El escaneo de credenciales permanece activo. Si ya existe esta variable en el panel de Netlify, revisar que su configuración no contradiga la lista del proyecto.
+
+`R2_TUTORIAL_PREFIX` y `R2_EVIDENCE_PREFIX` pertenecen a una configuración anterior y pueden eliminarse de Netlify: esta versión utiliza internamente `tutorials/` y `evidence/`. No es necesario añadirlas al `.env`. Si `APP_ORIGIN` tiene una dirección local, eliminarla **sólo en Netlify** para usar el dominio principal automáticamente; conservarla en el `.env` local.
+
+Las excepciones no incluyen la URI de MongoDB, las claves S3 de R2, el patrón ni `SESSION_SECRET`. No desactivar globalmente el escaneo ni excluir carpetas enteras para resolver coincidencias de configuración pública. Volver a desplegar el último commit después de corregir las variables del sitio.
+
 ## 5. Activación comprobable
 
 Antes de usar registros reales, probar con datos de prueba:

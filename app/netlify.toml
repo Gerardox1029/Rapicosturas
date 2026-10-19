@@ -5,6 +5,9 @@
 
 [build.environment]
   NODE_VERSION = "22"
+  # Son nombres, rutas y direcciones públicos, no credenciales.
+  # Mantener el escaneo activo para MongoDB, claves S3 y SESSION_SECRET.
+  SECRETS_SCAN_OMIT_KEYS = "APP_ORIGIN,MONGODB_DB,R2_BUCKET,R2_TUTORIAL_PREFIX,R2_EVIDENCE_PREFIX"
 
 [functions]
   node_bundler = "esbuild"
