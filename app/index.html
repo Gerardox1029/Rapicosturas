@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="es-PE">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#20152c"><meta name="description" content="Envíos y recepción entre los talleres de Rapicostura.">
+  <link rel="manifest" href="/manifest.webmanifest"><link rel="icon" href="/icons/icon.svg"><link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <title>Rapicostura · Cada entrega nos conecta</title>
+  <link rel="stylesheet" href="/src/web/styles.css"><script type="module" src="/src/web/app.js"></script>
+</head>
+<body>
+  <div class="studio"><aside class="intro"><a class="wordmark" href="/"><img src="/assets/logo.png" width="64" height="64" alt="Logo original de Rapicostura"><span>Rapicostura</span></a><div><p class="eyebrow">HECHO POR MUJERES, CON PROPÓSITO</p><h1>Cada puntada une.<br>Cada entrega<br><em>nos conecta.</em></h1><p>De nuestras manos a otra sede.<br>Un mismo cuidado en cada entrega.</p><span class="thread">Arequipa · Un mismo equipo</span></div><small>Menos pendientes. Más tiempo para crear.</small></aside>
+  <div class="device"><header><a class="mini-brand" href="/">R<span>Rapicostura<small>ENTREGAS QUE CONECTAN</small></span></a><button id="profile" class="avatar" aria-label="Opciones de sede y modo dueña">DO</button></header>
+  <div class="site-strip"><label for="site">Sede de trabajo</label><select id="site"></select><button id="save-site">Guardar sede</button></div>
+  <div id="connection" role="status" hidden></div><div id="update" hidden><span>Hay una versión nueva.</span><button id="apply-update">Actualizar</button></div>
+  <main id="main" tabindex="-1"><div class="loading">Preparando el taller…</div></main><nav id="nav" aria-label="Navegación principal"></nav><div id="toast" role="status" aria-live="polite"></div></div></div>
+  <dialog id="sheet" aria-labelledby="sheet-title"><div id="sheet-content"></div></dialog>
+  <dialog id="camera-dialog" aria-labelledby="camera-title"><div class="sheet-head"><h2 id="camera-title">Tu evidencia</h2><button id="camera-close" class="icon-button" aria-label="Cerrar cámara">×</button></div><video id="camera-feed" autoplay muted playsinline></video><p id="camera-message"></p><button id="camera-capture" class="primary">Tomar foto</button><button id="camera-native" class="secondary">Abrir cámara del teléfono</button><button id="camera-gallery" class="text-button">Elegir de la galería</button></dialog>
+  <input id="gallery" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm" hidden><input id="capture" type="file" accept="image/*" capture="environment" hidden>
+  <noscript>Activa JavaScript para usar Rapicostura.</noscript>
+</body></html>

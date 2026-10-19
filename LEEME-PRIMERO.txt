@@ -1,0 +1,31 @@
+RAPICOSTURA — WEB Y PWA
+
+PROYECTO ACTIVO: app/
+Leer app/README.md y app/docs/DESPLIEGUE_NETLIFY.md.
+
+En app/ usar Node.js 22 o posterior:
+  npm ci
+  npm run build
+  npm run dev
+
+Web conectada: http://127.0.0.1:4173/
+Prototipo de ejemplo: http://127.0.0.1:4173/?demo=1
+
+Sólo Netlify (web + API), MongoDB y Cloudflare R2.
+Firebase y Gemini no forman parte de la versión activa.
+El bot tiene exclusivamente una interfaz de Postulantes y visitas ficticias.
+
+Completar las credenciales en app/.env. Ese archivo no se sube a GitHub.
+La configuración pública de referencia está en app/.env.example.
+En el repositorio independiente Rapicosturas, usar base app y salida public.
+Si se publica desde el repositorio compartido GastosClaros, usar base Rapicostura/app.
+
+Patrón inicial N: 7,4,1,5,9,6,3. i es columna, j es fila.
+Se puede cambiar desde el perfil de dueña una vez conectado el servidor.
+
+Los tutoriales se conservan hasta eliminación de dueña.
+Las evidencias vencen 24 horas después de confirmar recepción; no a los siete días.
+
+La versión anterior, APK e integraciones quedaron en archivo-local/previo-netlify/,
+ignorados por Git y excluidos del despliegue. Se conservaron para recuperación.
+presentacion-parche/ es una entrega independiente del compañero y no se publica con la app.

@@ -1,0 +1,21 @@
+{
+  "name": "rapicostura-web",
+  "private": true,
+  "version": "1.0.0",
+  "type": "commonjs",
+  "engines": { "node": ">=22.13" },
+  "scripts": {
+    "build": "node scripts/build-app.mjs",
+    "dev": "node scripts/dev.mjs",
+    "test": "node --test tests/connected/*.test.mjs",
+    "owner:reset": "node scripts/reset-owner.mjs",
+    "services:check": "node scripts/check-services.mjs",
+    "check": "node --check src/web/app.js && node --check server/service.mjs && node --check netlify/functions/api.mjs"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.0.0",
+    "@aws-sdk/s3-request-presigner": "^3.0.0",
+    "mongodb": "^6.0.0"
+  },
+  "devDependencies": { "esbuild": "^0.25.0" }
+}

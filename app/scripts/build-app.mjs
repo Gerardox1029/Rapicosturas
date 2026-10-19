@@ -1,0 +1,23 @@
+import {build} from 'esbuild';
+import {readFile,writeFile,mkdir,cp,rm} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+const root=fileURLToPath(new URL('../',import.meta.url));
+const out=path.join(root,'public');
+// public/ es salida generada. Nunca copiar el repositorio entero ni su .env.
+await rm(out,{recursive:true,force:true});await mkdir(out,{recursive:true});
+const result=await build({entryPoints:[path.join(root,'src/web/app.js')],bundle:true,minify:true,write:false,format:'iife',target:'es2022',legalComments:'none'});
+const js=result.outputFiles[0].contents,css=await readFile(path.join(root,'src/web/styles.css'));
+const hash=x=>createHash('sha256').update(x).digest('hex').slice(0,12);
+const jsName=`app.${hash(js)}.js`,cssName=`app.${hash(css)}.css`;
+await writeFile(path.join(out,jsName),js);await writeFile(path.join(out,cssName),css);
+const html=(await readFile(path.join(root,'index.html'),'utf8')).replace('/src/web/styles.css','/'+cssName).replace('type="module" src="/src/web/app.js"',`defer src="/${jsName}"`);
+await writeFile(path.join(out,'index.html'),html);await cp(path.join(root,'assets'),path.join(out,'assets'),{recursive:true});await cp(path.join(root,'icons'),path.join(out,'icons'),{recursive:true});
+const manifest={id:'/',name:'Rapicostura',short_name:'Rapicostura',description:'Envíos y recepción entre talleres.',lang:'es-PE',start_url:'/',scope:'/',display:'standalone',background_color:'#20152c',theme_color:'#20152c',icons:[{src:'/icons/icon-192.png',sizes:'192x192',type:'image/png',purpose:'any'},{src:'/icons/icon-512.png',sizes:'512x512',type:'image/png',purpose:'any maskable'}]};
+await writeFile(path.join(out,'manifest.webmanifest'),JSON.stringify(manifest,null,2));
+const assets=['/','/index.html','/'+jsName,'/'+cssName,'/manifest.webmanifest','/icons/icon-192.png','/icons/icon-512.png','/icons/icon.svg','/assets/logo.png'];
+const version=hash(Buffer.concat([Buffer.from(js),css]));
+const sw=`const CACHE='rapicostura-${version}',ASSETS=${JSON.stringify(assets)};\nself.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS))));\nself.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('rapicostura-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));\nself.addEventListener('message',e=>{if(e.data?.type==='SKIP_WAITING')self.skipWaiting();});\nself.addEventListener('fetch',e=>{const r=e.request,u=new URL(r.url);if(r.method!=='GET'||u.origin!==self.location.origin||u.pathname.startsWith('/api/')||u.pathname.startsWith('/.netlify/'))return;if(r.mode==='navigate'){e.respondWith(fetch(r).catch(()=>caches.match('/index.html')));return;}if(ASSETS.includes(u.pathname))e.respondWith(caches.match(r).then(v=>v||fetch(r)));});\n`;
+await writeFile(path.join(out,'sw.js'),sw);
+console.log('Rapicostura preparada en public/: HTML, JS, CSS y recursos PWA. Sin credenciales ni módulos antiguos.');

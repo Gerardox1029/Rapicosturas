@@ -1,0 +1,2 @@
+import {readFile} from 'node:fs/promises';
+export async function loadEnv(){try{for(const line of (await readFile(new URL('../.env',import.meta.url),'utf8')).split(/\r?\n/)){const m=line.match(/^([A-Z][A-Z0-9_]*)\s*=\s*(.*)$/);if(m){let value=m[2].trim();if((value.startsWith('"')&&value.endsWith('"'))||(value.startsWith("'")&&value.endsWith("'")))value=value.slice(1,-1);process.env[m[1]]??=value;}}}catch(error){if(error.code!=='ENOENT')throw error;}}

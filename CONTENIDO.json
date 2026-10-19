@@ -1,0 +1,9 @@
+{
+  "fecha": "2026-10-19",
+  "excluye_sesiones_y_claves": true,
+  "proyecto_activo": "app/",
+  "salida_publica_generada": "app/public/",
+  "tecnologias": ["HTML/CSS/JavaScript", "PWA", "Netlify Functions", "MongoDB Atlas", "Cloudflare R2"],
+  "respaldo_local_ignorado": "archivo-local/previo-netlify/",
+  "estado": "primera versión web/PWA; flujo real de MongoDB y R2 verificado localmente; configurar variables y dominio al desplegar; bot sólo simulado"
+}
