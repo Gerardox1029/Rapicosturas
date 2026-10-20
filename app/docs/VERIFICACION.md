@@ -1,29 +1,21 @@
-# Verificación de entrega · 19 de octubre de 2026
+# Verificación · Rapicostura V2 · 19 de octubre de 2026
 
-## Comprobado
+## Resultado comprobado
 
-- Compilación con esbuild y Node.js 24: genera `public/index.html`, JS/CSS con nombre por contenido, manifest, service worker e iconos. Destino de Netlify: Node.js 22.
-- 27 casos automatizados aprobados: 18 sobre API y reglas del producto, 5 sobre el trazo del patrón y 4 sobre publicación, URLs firmadas, permisos de carga de imágenes/videos en la política CSP y PWA.
-- `.env`, `archivo-local/` y `app/public/` están excluidos de Git. El build no copia credenciales ni los módulos anteriores de Firebase/Gemini/bot.
-- MongoDB real: conexión, índices y persistencia de un envío técnico temporal.
-- R2 real: subida firmada de una imagen técnica pequeña, verificación de tamaño/tipo, copia a clave definitiva y lectura firmada con los mismos bytes.
-- Flujo real Yanahuara → Cayma: aparece En camino en la consulta de destino; recepción con otra evidencia; cambio a Recibido; `evidenceExpiresAt` exactamente 24 horas después de `confirmedAt` del servidor.
-- Se retiraron únicamente los envíos, metadatos de archivos y objetos temporales creados por esa prueba. Los contadores técnicos de frecuencia caducan automáticamente.
-- CORS de R2: se añadió `http://127.0.0.1:4173`, conservando otras reglas; solicitud OPTIONS verificada. El bucket conserva su acceso privado.
-- Navegador: interfaz conectada fuera de `?demo=1`, respuesta de API real; modo demostración, acceso con N, grilla sin coordenadas visibles, bandeja simulada de postulantes/visitas, categorías y búsqueda de videos. Vista móvil de 390 px sin desbordamiento horizontal.
+- Build con Node.js 24 y esbuild; plataforma configurada para Node.js 22 en Netlify. Publicación de HTML, JS/CSS con hash, iconos, manifest y service worker. No incluye archivos privados ni módulos de Firebase/Gemini/bot.
+- 41 casos automatizados: 28 de API/ciclo de vida, 6 de geometría y finalización del patrón, 4 de publicación/seguridad de recursos y 3 de pausa, reconexión y cancelación del cliente.
+- Límite exacto de 1.073.741.824 bytes aceptado; un byte adicional rechazado. API multipart comprueba partes incompletas, permiso de archivo, numeración, tamaño, reanudación y finalización.
+- Prueba real de R2 con 9 MiB en dos partes firmadas: preflight CORS para el dominio de producción, PUT de ambas partes, ListParts para retomar, CompleteMultipartUpload, HEAD y CopyObject. Se eliminaron los objetos y la sesión multipart temporal al finalizar. No se escribieron envíos ni documentos en MongoDB para esa prueba.
+- Pruebas locales de navegador en modo demo con medios artificiales, sin llamadas a la API de producción: sede automática, tema Recepción, patrón incorrecto con reinicio y patrón N correcto sin botón Entrar, grabación de video con contador, nota de voz con bloqueo hacia arriba, reproducción de ambos, creación/edición de envío, tutorial con portada extraída y grilla móvil de 430 px.
+- Retención de 72 horas desde el cierre real del servidor comprobada con reloj controlado: antes del límite hay acceso, al llegar se oculta y la limpieza elimina registro y bytes. En camino se conserva. Errores de borrado en R2 conservan metadatos para reintento. Evidencias disponibles con la antigua fecha de 24 horas se ajustan a la regla de 72 horas.
+- Edición/eliminación sólo con sede de origen declarada, recepción sólo con destino declarado; recibido no se edita. Control de revisión evita sobrescritura y carrera con recepción.
+- Tutoriales y portadas siguen disponibles después de la limpieza de evidencias; se retiran juntos al eliminar el tutorial. Cargas multipart sin completar se abortan al vencer la sesión de 24 horas.
+- `.env`, node_modules, salida public/ y archivo-local/ permanecen ignorados por Git. No se añadieron nuevas claves privadas.
 
-## Corrección posterior: Recepción
+## Límites de la verificación
 
-Se retiró el flujo Registrar prenda de cliente de ambas vistas, incluidos formulario, tarjetas, llamadas de consulta y rutas de API. Recepción sólo presenta envíos entre sedes. Se comprobó la interfaz de trabajadora y dueña en navegador; las antiguas rutas de prendas devuelven 404 para ambas. No se borraron registros existentes de MongoDB.
+El límite de 1 GB se comprobó por validación y protocolo, **no transfiriendo un video real de 1 GB**. La transferencia real de R2 fue de 9 MiB; la pausa/reconexión de cliente se probó con transporte controlado. Cámara y micrófono de las pruebas de navegador eran simulados; validar permisos, sonido, vibración y archivos de cámara reales en Android después de publicar. Algunas codificaciones no permiten extraer una portada en todos los navegadores.
 
-## Pendiente del entorno publicado
+No se esperaron tres días reales para la limpieza. Verificar en Netlify las ejecuciones horarias de expire-evidence y sus errores. La lectura/lista se bloquea al cumplir el plazo aunque el borrado físico se ejecute en la siguiente hora. No se recuperan archivos borrados por versiones anteriores.
 
-No se ha desplegado el sitio en Netlify. Seguir [DESPLIEGUE_NETLIFY.md](DESPLIEGUE_NETLIFY.md): variables privadas del sitio, dominio principal, CORS con el dominio HTTPS definitivo y acceso de red a Atlas desde Functions.
-
-En Netlify, **omitir `APP_ORIGIN` para usar automáticamente su variable de sistema `URL`**, o definir el dominio HTTPS definitivo. No copiar el valor local a producción.
-
-El borrado físico programado se probó con reloj simulado y objetos de prueba; debe comprobarse la ejecución horaria de `expire-evidence` tras desplegar. No se esperó un día real ni se borraron archivos del usuario para verificarla. Revisar que ninguna regla de ciclo de vida anterior elimine tutoriales permanentes o evidencias pendientes por antigüedad desde subida.
-
-La prueba real utilizó imágenes pequeñas. El límite de 300 MB por tutorial está validado por código, pero no se consumieron cientos de MB del bucket en una carga de prueba. La cámara, instalación PWA y reproducción de videos grandes deben probarse en el teléfono mediante HTTPS.
-
-Las trabajadoras eligen sede libremente según lo solicitado; esta selección no autentica su identidad. El bot sigue siendo exclusivamente una simulación.
+La sede sigue siendo de libre selección, según lo acordado: se valida el valor declarado, sin autenticar a la trabajadora. El bot sólo presenta ejemplos. La PWA necesita internet para operaciones compartidas y no puede garantizar una transferencia mientras el teléfono suspende o cierra la aplicación.

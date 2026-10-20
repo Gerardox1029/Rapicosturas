@@ -5,5 +5,5 @@
   "salida_publica_generada": "app/public/",
   "tecnologias": ["HTML/CSS/JavaScript", "PWA", "Netlify Functions", "MongoDB Atlas", "Cloudflare R2"],
   "respaldo_local_ignorado": "archivo-local/previo-netlify/",
-  "estado": "primera versión web/PWA; flujo real de MongoDB y R2 verificado localmente; configurar variables y dominio al desplegar; bot sólo simulado"
+  "estado": "versión 1.1 web/PWA; cargas multipart hasta 1 GB, grabadores de evidencia y voz, retención conjunta 72 horas desde recepción; bot sólo simulado"
 }

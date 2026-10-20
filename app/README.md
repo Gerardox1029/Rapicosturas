@@ -16,7 +16,7 @@ npm run dev
 - Prototipo navegable: `http://127.0.0.1:4173/?demo=1`. Los ejemplos no se envían al servidor.
 - Pruebas: `npm test` y `npm run check`.
 
-La configuración de publicación, CORS y variables está en [DESPLIEGUE_NETLIFY.md](docs/DESPLIEGUE_NETLIFY.md). El `.env` está ignorado por Git. Se verificaron la conexión real a MongoDB, lectura/escritura de evidencias en R2, envío, recepción y CORS local; los registros de prueba se retiraron. Falta publicar en Netlify y añadir su dominio a CORS. Ver [VERIFICACION.md](docs/VERIFICACION.md) para el alcance de las comprobaciones.
+La configuración de publicación, CORS y variables está en [DESPLIEGUE_NETLIFY.md](docs/DESPLIEGUE_NETLIFY.md). El `.env` está ignorado por Git. Se verificaron la conexión real a MongoDB, lectura/escritura de evidencias en R2, envío, recepción y CORS local; los registros de prueba se retiraron. El sitio está publicado en Netlify; CORS de R2 permite el dominio principal y el origen local. Las novedades V2 requieren publicar el commit correspondiente. Ver [VERIFICACION.md](docs/VERIFICACION.md) para el alcance de las comprobaciones.
 
 ## Cambios del informe
 
@@ -47,10 +47,12 @@ El frontend usa módulos JavaScript y esbuild para producir un script pequeño; 
 
 ## Archivos y retención
 
-Las cargas van directamente a R2 con permiso temporal. Las fotos se reducen, cuando el navegador puede decodificarlas, a un lado máximo de 1600 px y JPEG al 85 %. Evidencia: máximo 25 MB; tutorial MP4/WebM: máximo 300 MB.
+Las cargas van directamente a R2 con permiso temporal. Las fotos se reducen, cuando el navegador puede decodificarlas, a un lado máximo de 1600 px y JPEG al 85 %. Evidencia: máximo 25 MB; tutorial MP4/WebM: máximo 1 GB (1024 MB).
 
-Los tutoriales se conservan hasta eliminación de la dueña. Las evidencias no caducan mientras el envío esté En camino; vencen 24 horas después de la confirmación de recepción del servidor. La tarea horaria elimina el archivo físico y conserva los textos del envío. No aplicar la antigua regla de siete días desde subida.
+Los tutoriales se conservan hasta eliminación de la dueña. Las evidencias no caducan mientras el envío esté En camino; vencen 72 horas después de la confirmación de recepción del servidor. La tarea horaria elimina el archivo físico y elimina también el registro del envío a las 72 horas. No aplicar la antigua regla de siete días desde subida.
 
 Videos avisa al llegar a 10, 50 y 80 GB sobre una referencia de 100 GB. La medición corresponde a objetos reales bajo `tutorials/` en R2; 100 GB no es una cuota gratuita incluida ni un bloqueo automático.
 
 El material anterior, su APK y sus integraciones se conservan en `../archivo-local/previo-netlify/`, fuera de Git y del despliegue. No forman parte de esta versión activa. La PWA reemplaza ese flujo de entrega móvil y usa la misma URL web.
+
+Cambios V2, recuperación de cargas y nueva retención: [CAMBIOS_V2.md](docs/CAMBIOS_V2.md).

@@ -15,3 +15,11 @@ Los iconos son SVG lineales locales de trazo 1.6 px. No se usa color como única
 El patrón tiene círculos táctiles pequeños en una matriz 3×3; no debe ampliarse el área sensible a toda la celda cuadrada. Las diagonales se detectan geométricamente y la guía de trazo ayuda a confirmar el recorrido. Es accesible con teclado además de tacto.
 
 En escritorio hay una composición editorial y marco móvil de 440 px. En pantallas de hasta 480 px la aplicación ocupa 100dvh y respeta los márgenes seguros. Ese marco es de presentación, no parte de la navegación móvil.
+
+## Ajustes V2 para integración
+
+La marca lavanda se conserva. Cada bandeja modifica sólo acentos y superficies: Envíos usa acento `#DF9FCE`, superficie `#352337` y hero `#673C61 → #442747`; Recepción usa acento `#A8A4F0`, superficie `#29243E` y hero `#454674 → #352747`. Las tarjetas mantienen radios de 20 px y acciones de al menos 44 px. El título de sede entra con opacidad/desplazamiento de 5 px en 220 ms. El selector no requiere confirmación.
+
+El conmutador de bandeja tiene 48 px mínimos de alto y aparece centrado. El menú ⋯ se alinea a la derecha del encabezado. Las portadas de video usan imagen recortada con object-fit cover y un círculo oscuro de reproducción superpuesto.
+
+Error del patrón: rojo `#FF6E80`, fondo `#6A273D`, sacudida breve y reinicio tras 650 ms. La vibración es complementaria y depende del dispositivo. Grabación: punto rojo `#FF526A`, contador de segundos y onda lavanda; el bloqueo de nota se anuncia con candado. Carga: barra de 12 px con degradado `#9C75DC → #EDAFD6`, estado escrito y botones Pausar/Reanudar/Cancelar. Siempre se respeta la preferencia de reducir movimiento.

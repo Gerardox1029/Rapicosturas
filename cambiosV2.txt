@@ -1,0 +1,88 @@
+===============================================================================
+INFORME DE CAMBIOS DE REQUERIMIENTOS FUNCIONALES Y NO FUNCIONALES
+Proyecto: Rapicostura - Aplicación de Gestión de Sedes, Envíos y Recepción
+===============================================================================
+
+1. INTRODUCCIÓN
+Este documento contiene la especificación consolidada de los requerimientos funcionales, no funcionales y de interfaz/UX solicitados para la plataforma Rapicostura. Su objetivo es brindar a los desarrolladores y herramientas de generación de código (Codex) una guía clara, técnica y estructurada para implementar las modificaciones.
+
+-------------------------------------------------------------------------------
+2. REQUERIMIENTOS FUNCIONALES (RF)
+-------------------------------------------------------------------------------
+
+RF-01: Selección y Carga Automática de Sede
+- Descripción: Al seleccionar una sede desde el menú desplegable superior, la aplicación debe actualizar inmediatamente todo el contexto de datos de la pantalla sin requerir confirmación manual.
+- Criterio de Aceptación: Se elimina completamente el botón "Guardar sede". La reconfiguración de la sede seleccionada debe ser reactiva y automática al evento onChange.
+
+RF-02: Módulo de Grabación de Audio estilo WhatsApp en Registro de Envíos
+- Descripción: En el formulario de descripción de envíos, se debe incorporar una herramienta nativa de grabación de notas de voz.
+- Comportamiento de Interfaz (UI/UX):
+  * Presionar y sostener el botón de micrófono para iniciar la grabación.
+  * Deslizar hacia arriba para activar el bloqueo de grabación (sigue grabando sin mantener presionado el botón).
+  * Mostrar una animación visual con espectro de ondas de voz durante la grabación activa.
+- Integración y Almacenamiento: El archivo de audio grabado debe ser procesado y almacenado en Cloudflare R2 como evidencia multimedia del envío (junto a fotos y videos).
+
+RF-03: Menú Contextual de Control y Edición de Envíos (3 Puntos)
+- Descripción: Cada tarjeta de envío desplegada en el panel debe incluir un icono de tres puntos (...) en la esquina superior derecha.
+- Control de Accesos / Permisos: El menú de opciones debe mostrarse ÚNICAMENTE si la sede autenticada/activa coincide con la sede que originó/creó el envío.
+- Opciones del Menú:
+  * Editar envío (permite modificar datos del registro).
+  * Eliminar envío (permite cancelar o retirar la tarjeta).
+
+RF-04: Purga y Eliminación Automática de Envíos Completados
+- Descripción: Implementación de lógica de ciclo de vida de datos para mantener optimizada la base de datos y la interfaz.
+- Regla de Negocio: Todos los registros de envíos que hayan sido marcados como "completados" o hayan culminado su proceso de recepción deben ser eliminados automáticamente del sistema al transcurrir 3 días naturales (72 horas) desde la fecha de cierre.
+
+-------------------------------------------------------------------------------
+3. REQUERIMIENTOS NO FUNCIONALES (RNF)
+-------------------------------------------------------------------------------
+
+RNF-01: Ampliación del Límite de Carga de Videos
+- Descripción: Aumentar la capacidad máxima de subida para archivos de video en la sección de "Videos del Taller".
+- Límite Previo: 300 MB.
+- Nuevo Límite: 1 GB (1024 MB).
+- Impacto en Infraestructura: Requiere actualización de validadores en frontend, configuración de tamaño de cuerpo de petición en servidor/proxy (ej. Nginx / middleware backend) y ajuste de permisos/tiempos de expiración en URLs firmadas hacia Cloudflare R2.
+
+RNF-02: Almacenamiento Multimedia Descentralizado (Cloudflare R2)
+- Descripción: La gestión de audios y videos de gran tamaño (hasta 1 GB) debe operar mediante direct upload / URLs pre-firmadas en Cloudflare R2 para garantizar que el servidor principal no sufra degradación por consumo de ancho de banda o procesamiento de E/S.
+
+RNF-03: Reactividad y Rendimiento en Cambio de Estado
+- Descripción: La actualización de la interfaz al cambiar la sede o conmutar el modo de Recepción/Envíos debe ser fluida y sin recargas de página completas (comportamiento de Single Page Application - SPA), asegurando tiempos de renderizado inferiores a 200 ms.
+
+-------------------------------------------------------------------------------
+4. REQUERIMIENTOS DE INTERFAZ DE USUARIO Y EXPERIENCIA (UI/UX)
+-------------------------------------------------------------------------------
+
+UI-01: Título y Banner Destacado de Sede Activa
+- Ubicación: Zona superior del panel de control, sobre la sección de envíos.
+- Formato y Estilo: Título principal en formato "Sede: [Nombre Sede]" (ej. "Sede: Dolores") con tipografía de gran tamaño, llamativa y resaltante. Debe incluir una animación sutil de entrada/aparición al cargar o cambiar de sede.
+
+UI-02: Rediseño e Integración Visual del Switch Recepción / Envíos
+- Ubicación y Dimensión: Posicionado centrado en la pantalla, justo debajo del área de Envíos, con dimensiones ampliadas para facilitar su uso en dispositivos móviles y táctiles.
+- Esquema de Color Dinámico por Modo:
+  * Modo "Recepción": Interfaz con tonos Morado-Azulesco aplicados al switch, tarjetas de recepción e historiales.
+  * Modo "Envíos": Interfaz con tonos Rojo-Moradesco (diferenciados, sin cambios bruscos de contraste) para el área de envíos.
+
+UI-03: Estandarización de Botones de Acción de Alto Contraste
+- Botón "Ver detalle" (Sección Envíos): Diseño ampliado, tipografía legible y color resaltante/de alto contraste para llamar la atención operativa.
+- Botón "Recibir" (Sección Recepción): Estilo equivalente al botón "Ver detalle" (gran tamaño, color contrastante) para agilizar la acción de recepción por parte del personal de taller.
+
+-------------------------------------------------------------------------------
+5. GUÍA DE IMPLEMENTACIÓN TÉCNICA PARA DESARROLLADORES (CODEX)
+-------------------------------------------------------------------------------
+
+1. Modificaciones en Frontend:
+   - Componente `SelectorSede`: Remover el botón `Guardar Sede` y asociar el evento `onChange` del `<select>` a la mutación del estado global de sede.
+   - Componente `HeaderSede`: Implementar animación CSS / Framer Motion para el texto `Sede: [Nombre]`.
+   - Componente `AudioRecorder`: Desarrollar utilizando la Web Audio API y MediaRecorder. Incluir lógica de gesto deslizable (lock) y canvas/SVG animado para la onda de voz.
+   - Componente `SwitchModo`: Aplicar clases dinámicas de CSS segun el tema (`theme-recepcion` vs `theme-envios`).
+   - Componente `TarjetaEnvio`: Condicionar la visibilidad del menú contextual de 3 puntos a `envio.id_sede_emisor === usuario.id_sede_actual`.
+   - Componentes `BtnVerDetalle` y `BtnRecibir`: Aplicar clases de estilo de alto contraste y mayor padding táctil.
+
+2. Modificaciones en Backend y Base de Datos:
+   - Endpoint de Presigned URLs: Configurar `content-length-range` hasta 1,073,741,824 bytes (1 GB) para videos y habilitar mime-types de audio (audio/webm, audio/ogg, audio/mp3).
+   - Esquema de BD (Tabla `envios`): Agregar campo `audio_url VARCHAR(512) NULL` y `audio_duracion INT NULL`.
+   - Tarea Programada (Cron / Worker): Crear script automatizado que ejecute periódicamente:
+     `DELETE FROM envios WHERE estado = 'COMPLETADO' AND fecha_completado <= NOW() - INTERVAL 3 DAY;`
+
+===============================================================================

@@ -1,3 +1,4 @@
+import {runUpload} from './uploads.js';
 import {CATEGORIES} from './model.js';
 export const demo=new URLSearchParams(location.search).get('demo')==='1';
 const demoMedia=new Map();let demoOwner=false,demoPattern='7415963';
@@ -23,20 +24,20 @@ async function demoRequest(path,method,body){
   if(p==='/owner/logout'){demoOwner=false;return {owner:false};}
   if(p==='/owner/pattern'){if(body.currentPattern.join('')!==demoPattern)throw Error('El patrón actual no coincide.');demoPattern=body.newPattern.join('');return {ok:true};}
   if(p==='/shipments'&&method==='GET')return {items:demoShipments};
-  if(p==='/shipments'&&method==='POST'){const item={...body,evidenceId:body.evidence?.id,id:`RC-${Date.now().toString(36).toUpperCase()}`,title:body.description||'Encargo entre sedes',status:'transit',createdAt:new Date().toISOString()};demoShipments=[item,...demoShipments];return item;}
+  if(p==='/shipments'&&method==='POST'){const item={...body,evidenceId:body.evidence?.id,audioId:body.audio?.id,revision:0,id:`RC-${Date.now().toString(36).toUpperCase()}`,title:body.description||'Encargo entre sedes',status:'transit',createdAt:new Date().toISOString()};demoShipments=[item,...demoShipments];return item;}
+  if(p.startsWith('/shipments/')&&method==='DELETE'){demoShipments=demoShipments.filter(s=>s.id!==p.split('/')[2]);return {ok:true};}
+  if(p.startsWith('/shipments/')&&method==='PATCH'){const s=demoShipments.find(s=>s.id===p.split('/')[2]);Object.assign(s,body,{title:body.description||s.title,revision:(s.revision||0)+1});return s;}
   if(p.startsWith('/shipments/')&&method==='GET')return demoShipments.find(s=>s.id===p.split('/')[2]);
-  if(p.endsWith('/receipt')){const item=demoShipments.find(s=>s.id===p.split('/')[2]);Object.assign(item,{status:'received',receivedAt:body.receivedAt,receiptNote:body.note,receiptEvidenceId:body.evidence?.id,evidenceExpiresAt:new Date(Date.now()+86400000).toISOString()});return item;}
+  if(p.endsWith('/receipt')){const item=demoShipments.find(s=>s.id===p.split('/')[2]);Object.assign(item,{status:'received',receivedAt:body.receivedAt,receiptNote:body.note,receiptEvidenceId:body.evidence?.id,receiptAudioId:body.audio?.id,evidenceExpiresAt:new Date(Date.now()+86400000).toISOString()});return item;}
   if(p==='/videos'&&method==='GET')return {items:demoVideos};
-  if(p==='/videos'&&method==='POST'){const v={...body,id:`VID-${Date.now()}`,mediaId:body.media.id};demoVideos.unshift(v);return v;}
+  if(p==='/videos'&&method==='POST'){const v={...body,id:`VID-${Date.now()}`,mediaId:body.media.id,thumbnailURL:demoMedia.get(body.thumbnail?.id)?.url};demoVideos.unshift(v);return v;}
   if(p.startsWith('/videos/')&&method==='DELETE'){demoVideos.splice(demoVideos.findIndex(v=>v.id===p.split('/')[2]),1);return {ok:true};}
   if(p==='/videos/usage')return {usedBytes:0,referenceBytes:100_000_000_000};
   if(p.startsWith('/media/')&&p.endsWith('/url'))return (demoMedia.get(p.split('/')[2])||{url:null});
   throw Error('Esta acción no forma parte de la demostración.');
 }
 export async function upload(file,kind,onProgress=()=>{}){
-  if(demo){const id=crypto.randomUUID();demoMedia.set(id,{url:URL.createObjectURL(file),contentType:file.type});onProgress(100);return {id,token:'demo'};}
-  const ticket=await request('/media/tickets',{method:'POST',body:{kind,contentType:file.type,sizeBytes:file.size}});
-  await new Promise((resolve,reject)=>{const xhr=new XMLHttpRequest();xhr.open('PUT',ticket.url);xhr.setRequestHeader('Content-Type',file.type);xhr.timeout=15*60*1000;xhr.upload.onprogress=e=>{if(e.lengthComputable)onProgress(Math.round(e.loaded/e.total*100));};xhr.onload=()=>xhr.status>=200&&xhr.status<300?resolve():reject(Error('No se pudo subir el archivo a R2. Comprueba CORS y vuelve a intentar.'));xhr.onerror=()=>reject(Error('La carga se interrumpió. Revisa la conexión.'));xhr.ontimeout=()=>reject(Error('La carga tardó demasiado. Intenta de nuevo.'));xhr.send(file);});
-  await request(`/media/${ticket.id}/complete`,{method:'POST',body:{token:ticket.token}});return {id:ticket.id,token:ticket.token};
+  if(demo){const id=crypto.randomUUID();demoMedia.set(id,{url:URL.createObjectURL(file),contentType:file.type});onProgress(100,{state:'done',loaded:file.size,total:file.size});return {id,token:'demo'};}
+  return runUpload(file,kind,request,onProgress);
 }
 export async function mediaURL(id,site){if(!id)return null;return (await request(`/media/${encodeURIComponent(id)}/url?site=${encodeURIComponent(site)}`)).url;}

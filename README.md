@@ -39,3 +39,5 @@ El archivo `.env`, las sesiones locales, las dependencias instaladas y las copia
 - [Verificaciones y pendientes de producción](app/docs/VERIFICACION.md)
 
 `presentacion-parche/` es un material independiente del compañero y no forma parte de la aplicación publicada.
+
+La versión 1.1 aplica cambiosV2.txt y los ajustes posteriores. Consulta [cambios y decisiones V2](app/docs/CAMBIOS_V2.md) y [estilos para integración](app/docs/ESTILO_Y_ESENCIA.md).

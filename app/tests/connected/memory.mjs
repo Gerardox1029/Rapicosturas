@@ -8,7 +8,12 @@ export class MemoryDB{
  }
 }
 export class MemoryStore{
- constructor(){this.objects=new Map();this.deleted=[];this.reads=[];}
+ constructor(){this.objects=new Map();this.deleted=[];this.reads=[];this.multiparts=new Map();}
+ async beginMultipart(f){const id='upload-'+f._id;this.multiparts.set(id,{file:clone(f),parts:[]});return id;}
+ async partURL(f,n){return 'https://storage.example/'+f.stagingKey+'?part='+n;}
+ async parts(f){return clone(this.multiparts.get(f.uploadId)?.parts||[]);}
+ async completeMultipart(f,parts){this.objects.set(f.stagingKey,{sizeBytes:parts.reduce((n,p)=>n+p.sizeBytes,0),contentType:f.contentType});this.multiparts.delete(f.uploadId);}
+ async abortMultipart(f){this.multiparts.delete(f.uploadId);}
  async uploadURL(f){return 'https://storage.example/'+f.stagingKey;}
  async readURL(f,seconds){this.reads.push({key:f.objectKey,seconds});return 'https://storage.example/'+f.objectKey;}
  async head(key){if(!this.objects.has(key))throw Error('not found');return clone(this.objects.get(key));}
