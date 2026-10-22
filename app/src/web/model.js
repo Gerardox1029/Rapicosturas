@@ -1,4 +1,4 @@
-export const SITES=[{id:'dolores',name:'Dolores · José Luis Bustamante y Rivero',short:'Dolores',initials:'DO'},{id:'siglo-xx',name:'Siglo XX · José Luis Bustamante y Rivero',short:'Siglo XX',initials:'SX'},{id:'cerro-colorado',name:'Cerro Colorado',short:'Cerro Colorado',initials:'CC'},{id:'yanahuara',name:'Yanahuara',short:'Yanahuara',initials:'YA'},{id:'cayma',name:'Cayma',short:'Cayma',initials:'CA'}];
+export const SITES=[{id:'dolores',name:'Dolores JLBYR',short:'Dolores JLBYR',initials:'DO'},{id:'siglo-xx',name:'Siglo XX JLBYR',short:'Siglo XX JLBYR',initials:'SX'},{id:'cerro-colorado',name:'Cerro Colorado',short:'Cerro Colorado',initials:'CC'},{id:'yanahuara',name:'Yanahuara',short:'Yanahuara',initials:'YA'},{id:'cayma',name:'Cayma',short:'Cayma',initials:'CA'}];
 export const DEFAULT_USERS=[{id:'user-yesenia',name:'Yesenia',kind:'user'},{id:'user-yolanda',name:'Yolanda',kind:'user'}];
 let users=DEFAULT_USERS;
 export function setUsers(value){users=Array.isArray(value)?value:DEFAULT_USERS;}
