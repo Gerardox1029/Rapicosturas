@@ -8,7 +8,7 @@ Tipografía local Trebuchet MS/Arial en controles; Georgia para marca y frase de
 
 Tarjetas con radio 20 px, campos 12 px, hojas inferiores 25 px. Separación habitual 8/10/12/16/20/24 px. Controles principales de al menos 46 px. Cabecera y navegación permanecen visibles; el contenido tiene scroll propio. El selector de sede ocupa el ancho de cabecera.
 
-Envíos usa el conmutador Recepción/Envíos, chips de estado y tarjetas de ruta. Las dos métricas de dueña preceden a la lista. Videos usa grilla de dos columnas, cubiertas ilustradas, categoría desplegable y búsqueda inmediata. Bot WhatsApp conserva tarjetas de postulantes/visitas claramente ficticias, sin mensajes flotantes.
+Envíos usa el conmutador Recepción/Envíos, chips de estado y tarjetas de ruta. Las dos métricas de dueña preceden a la lista. Videos usa grilla de dos columnas, cubiertas ilustradas, categoría desplegable y búsqueda inmediata. Bot WhatsApp conserva una tarjeta de configuración futura y una bandeja vacía de postulantes/visitas, sin mensajes flotantes.
 
 Los iconos son SVG lineales locales de trazo 1.6 px. No se usa color como única indicación: acompañar con palabras, checks y posición. El camión se mueve suavemente, el humo se desvanece y el check completa su trazo. `prefers-reduced-motion` desactiva el movimiento.
 
@@ -23,3 +23,11 @@ La marca lavanda se conserva. Cada bandeja modifica sólo acentos y superficies:
 El conmutador de bandeja tiene 48 px mínimos de alto y aparece centrado. El menú ⋯ se alinea a la derecha del encabezado. Las portadas de video usan imagen recortada con object-fit cover y un círculo oscuro de reproducción superpuesto.
 
 Error del patrón: rojo `#FF6E80`, fondo `#6A273D`, sacudida breve y reinicio tras 650 ms. La vibración es complementaria y depende del dispositivo. Grabación: punto rojo `#FF526A`, contador de segundos y onda lavanda; el bloqueo de nota se anuncia con candado. Carga: barra de 12 px con degradado `#9C75DC → #EDAFD6`, estado escrito y botones Pausar/Reanudar/Cancelar. Siempre se respeta la preferencia de reducir movimiento.
+
+## Ajustes V3 para integración
+
+El selector «Sede de trabajo / Usuario» ocupa el ancho completo del marco; a la derecha lleva el botón ✏️ Editar usuarios. Las sedes conservan su nombre corto y las usuarias se presentan como «Soy [nombre]». El título de la bandeja repite esa identidad. El conmutador de recepción y envío se ve en ambos modos.
+
+Descripción/observación y audio comparten una barra redondeada. Campo `#242831`, borde `#555967`, texto claro y micrófono circular rosa `#CB6688` de 54 px. Al grabar, el campo se sustituye por contador, punto rojo, onda y guía para cancelar deslizando a la izquierda; deslizar arriba bloquea. El estilo toma únicamente la composición de la referencia de WhatsApp, sin copiar sus marcas. La grabación se puede reproducir y eliminar antes de enviar.
+
+Los avisos PWA usan el icono local de Rapicostura y una acción para abrir la bandeja de recepción. El sistema operativo controla su tipografía y no admite negritas en partes del texto. El botón de activación lleva campana lineal y explica que aplica a la entidad seleccionada.

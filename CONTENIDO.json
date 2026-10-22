@@ -1,9 +1,9 @@
 {
-  "fecha": "2026-10-19",
+  "fecha": "2026-10-21",
   "excluye_sesiones_y_claves": true,
   "proyecto_activo": "app/",
   "salida_publica_generada": "app/public/",
   "tecnologias": ["HTML/CSS/JavaScript", "PWA", "Netlify Functions", "MongoDB Atlas", "Cloudflare R2"],
   "respaldo_local_ignorado": "archivo-local/previo-netlify/",
-  "estado": "versión 1.1 web/PWA; cargas multipart hasta 1 GB, grabadores de evidencia y voz, retención conjunta 72 horas desde recepción; bot sólo simulado"
+  "estado": "versión 1.2 web/PWA; sedes y usuarias como origen/destino, compositor de voz, Web Push preparado, videos de 1 GB, retención conjunta 72 horas; bot vacío"
 }

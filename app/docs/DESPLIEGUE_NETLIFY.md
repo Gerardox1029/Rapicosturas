@@ -21,6 +21,9 @@ Usar Node.js 22 o posterior. Completar `app/.env` localmente, sin pegar valores 
 | `R2_BUCKET` | `rapicosturas`. |
 | `SESSION_SECRET` | La clave aleatoria ya generada en el archivo local. Usar la misma en el servidor; nunca publicarla. |
 | `OWNER_INITIAL_PATTERN` | `7415963`: N inicial. Sólo se usa al crear la configuración de dueña por primera vez. |
+| `VAPID_PUBLIC_KEY` | Clave pública Web Push generada en el `.env` local. |
+| `VAPID_PRIVATE_KEY` | Clave privada Web Push del mismo par; sólo Functions. |
+| `VAPID_SUBJECT` | URL de contacto del sitio, ya preparada en el `.env` local. |
 
 La autenticación de dueña guarda una derivación scrypt del patrón en MongoDB y una sesión de ocho horas en cookie HttpOnly/SameSite. El patrón se puede cambiar desde el avatar; se comprueba el actual y se invalida el acceso de las sesiones anteriores. Para recuperación por quien administra el servidor: añadir temporalmente `OWNER_RECOVERY_PATTERN` al `.env`, ejecutar `npm run owner:reset` y retirar esa variable. Cambiar `OWNER_INITIAL_PATTERN` después del primer acceso no cambia un patrón ya guardado.
 
@@ -131,3 +134,11 @@ No hacen falta nuevas variables privadas para V2. Mantener CORS con el dominio d
 Tras publicar, recargar la web. En una PWA abierta aparecerá «Hay una versión nueva»; tocar **Actualizar** cuando no haya un formulario abierto. La interfaz busca actualizaciones al volver a primer plano y cada cinco minutos mientras está visible. Los formularios no se reemplazan durante una operación.
 
 La limpieza horaria `expire-evidence` elimina evidencias y registros 72 horas después del cierre confirmado por servidor. Las evidencias disponibles de registros anteriores se ajustan a este plazo al consultar/limpiar; un archivo ya eliminado físicamente por la versión anterior no se puede recuperar.
+
+## Actualización V3: Web Push y usuarias
+
+La V3 incorpora usuarias como origen y destino, audio junto al texto y avisos PWA para el destino. Las tres variables VAPID ya están generadas en `app/.env` local, que Git ignora. **Copiar sus valores al panel de variables del mismo sitio Netlify** con alcance Functions, sin pegarlos en el repositorio ni en un chat, y volver a desplegar. Mantener el par VAPID estable: cambiarlo invalida las suscripciones existentes y obliga a activar avisos otra vez en cada dispositivo. `VAPID_SUBJECT` es una dirección pública, por eso está excluida del detector de secretos; la clave privada sigue bajo escaneo.
+
+En cada móvil, seleccionar sede o usuaria y tocar «Activar avisos para…». Aceptar el permiso del navegador. La API guarda la suscripción para esa entidad y, al registrar un envío nuevo, envía el aviso únicamente a los dispositivos vinculados al destino. La entrega depende de HTTPS, conexión y permisos del dispositivo. Si las variables no están configuradas, el aviso no se activa, pero los envíos funcionan. La URL abre `/envios?tab=recepcion` y el detalle del envío.
+
+La selección de entidad sigue siendo libre. No tratar los avisos ni el selector como autenticación de trabajadoras. El Bot WhatsApp se mantiene vacío por decisión posterior del usuario; no configurar API de WhatsApp ni datos de contacto para V3.

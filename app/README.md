@@ -1,6 +1,6 @@
 # Rapicostura · Web y PWA
 
-Una sola interfaz HTML/CSS/JavaScript para navegador y móvil instalable. Un sitio Netlify aloja la web y la API; MongoDB guarda envíos, recepciones, textos y referencias; Cloudflare R2 almacena fotos y videos. El bot es sólo una pantalla de ejemplos de postulantes y visitas.
+Una sola interfaz HTML/CSS/JavaScript para navegador y móvil instalable. Un sitio Netlify aloja la web y la API; MongoDB guarda envíos, recepciones, usuarias, textos y referencias; Cloudflare R2 almacena fotos, audio y videos. El bot muestra una bandeja vacía hasta su futura integración.
 
 ## Empezar
 
@@ -20,7 +20,7 @@ La configuración de publicación, CORS y variables está en [DESPLIEGUE_NETLIFY
 
 ## Cambios del informe
 
-Envíos incorpora el conmutador Recepción / Envíos, filtros sin recarga, sede en cabecera, métricas de dueña y registro local de sede. La navegación elimina Mis trabajos, Compañeras, Equipo y Actividad de trabajo. Videos tiene búsqueda, las cuatro categorías acordadas y una tarjeta de carga para la dueña. Bot WhatsApp presenta fichas ficticias bajo Postulantes y visitas.
+Envíos incorpora el conmutador Recepción / Envíos, filtros sin recarga, selector de sede o usuaria en cabecera y métricas de dueña. La navegación elimina Mis trabajos, Compañeras, Equipo y Actividad de trabajo. Videos tiene búsqueda, las cuatro categorías acordadas y una tarjeta de carga para la dueña. Bot WhatsApp mantiene Postulantes y visitas vacío.
 
 El acceso inicial de dueña usa el patrón N **7 → 4 → 1 → 5 → 9 → 6 → 3**, con `i` como columna y `j` como fila: `i1j3 → i1j2 → i1j1 → i2j2 → i3j3 → i3j2 → i3j1`. La detección es circular y reconoce diagonales entre eventos táctiles. El patrón real se valida en servidor y puede cambiarse desde el avatar; el modo demostración usa un patrón independiente en memoria.
 
@@ -56,3 +56,6 @@ Videos avisa al llegar a 10, 50 y 80 GB sobre una referencia de 100 GB. La medic
 El material anterior, su APK y sus integraciones se conservan en `../archivo-local/previo-netlify/`, fuera de Git y del despliegue. No forman parte de esta versión activa. La PWA reemplaza ese flujo de entrega móvil y usa la misma URL web.
 
 Cambios V2, recuperación de cargas y nueva retención: [CAMBIOS_V2.md](docs/CAMBIOS_V2.md).
+
+Entidades, avisos Web Push y compositor de voz V3: [CAMBIOS_V3.md](docs/CAMBIOS_V3.md).
+Mapa de carpetas, colecciones y recorridos: [MAPA_DEL_PROYECTO.md](docs/MAPA_DEL_PROYECTO.md). Las pautas rápidas para trabajar dentro del repositorio están en [AGENTS.md](../AGENTS.md).

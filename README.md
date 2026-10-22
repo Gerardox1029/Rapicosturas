@@ -2,11 +2,11 @@
 
 Aplicación para registrar envíos entre sedes y confirmar su recepción. Una misma interfaz HTML/CSS/JavaScript funciona en navegador y se puede instalar como PWA en Android.
 
-- Trabajadoras: selección libre de sede, registro de envíos con foto o video y recepción en destino.
-- Dueña: supervisión del equipo, filtros por sede, biblioteca de videos y patrón de acceso modificable.
-- Evidencias en Cloudflare R2: vencen 24 horas después de confirmar recepción; los textos del historial se conservan en MongoDB.
+- Trabajadoras: selección libre de sede o usuaria, registro de envíos con foto, video o audio y recepción en destino.
+- Dueña: supervisión del equipo, filtros por entidad, biblioteca de videos y patrón de acceso modificable.
+- Evidencias en Cloudflare R2: vencen junto con el historial 72 horas después de confirmar recepción.
 - Tutoriales en R2: permanecen hasta que la dueña los elimine. Avisos de uso a 10, 50 y 80 GB sobre una referencia de 100 GB.
-- Postulantes y visitas: ejemplos visuales; el bot todavía es una simulación.
+- Postulantes y visitas: bandeja vacía; el bot todavía no está conectado.
 
 ## Desarrollo local
 
@@ -37,7 +37,8 @@ El archivo `.env`, las sesiones locales, las dependencias instaladas y las copia
 - [Cambios aplicados](app/docs/INFORME_CAMBIOS_APLICADOS.md)
 - [Estilos y esencia](app/docs/ESTILO_Y_ESENCIA.md)
 - [Verificaciones y pendientes de producción](app/docs/VERIFICACION.md)
+- [Mapa de módulos y flujos](app/docs/MAPA_DEL_PROYECTO.md)
 
 `presentacion-parche/` es un material independiente del compañero y no forma parte de la aplicación publicada.
 
-La versión 1.1 aplica cambiosV2.txt y los ajustes posteriores. Consulta [cambios y decisiones V2](app/docs/CAMBIOS_V2.md) y [estilos para integración](app/docs/ESTILO_Y_ESENCIA.md).
+La versión 1.2 aplica `cambiosV3.md` y el compositor de voz solicitado después. Consulta [cambios y decisiones V3](app/docs/CAMBIOS_V3.md) y [estilos para integración](app/docs/ESTILO_Y_ESENCIA.md).

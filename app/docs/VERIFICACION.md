@@ -19,4 +19,12 @@ El límite de 1 GB se comprobó por validación y protocolo, **no transfiriendo 
 
 No se esperaron tres días reales para la limpieza. Verificar en Netlify las ejecuciones horarias de expire-evidence y sus errores. La lectura/lista se bloquea al cumplir el plazo aunque el borrado físico se ejecute en la siguiente hora. No se recuperan archivos borrados por versiones anteriores.
 
-La sede sigue siendo de libre selección, según lo acordado: se valida el valor declarado, sin autenticar a la trabajadora. El bot sólo presenta ejemplos. La PWA necesita internet para operaciones compartidas y no puede garantizar una transferencia mientras el teléfono suspende o cierra la aplicación.
+La sede y usuaria siguen siendo de libre selección, según lo acordado: se valida el valor declarado, sin autenticar a la trabajadora. El bot está vacío. La PWA necesita internet para operaciones compartidas y no puede garantizar una transferencia mientras el teléfono suspende o cierra la aplicación.
+
+## Complemento V3 · 21 de octubre de 2026
+
+- Nuevas pruebas de API: alta, cambio de nombre y baja de usuarias con identificador estable; rutas usuaria ↔ sede y usuaria ↔ usuaria; bloqueo de eliminación con envíos en camino; filtros de origen/destino para ambos modos.
+- Web Push: la suscripción se vincula sólo al destino seleccionado; se rechazan URLs de servicio no confiables; el mensaje incluye remitente, clase de envío y ruta a Recepción. Se probó el emisor con transporte inyectado y que un fallo de notificación no revierte el envío.
+- Audio: se verificaron duración persistida y ruta estable que redirige a URL firmada. La evidencia conserva la regla de 72 horas.
+- Build y tests completos pasan. Navegador móvil aislado en modo demo: crear usuaria, grabar/reproducir audio, enviar con foto, cambiar a Cayma y confirmar recepción. Se comprobaron bloqueo hacia arriba, cancelación hacia la izquierda y apertura directa de `/envios?tab=recepcion` con el detalle; sin errores de página.
+- Falta una prueba de entrega Push entre dos dispositivos reales después de copiar las claves VAPID del `.env` privado a Netlify. El navegador de prueba no envió avisos externos.
