@@ -58,14 +58,14 @@ flowchart LR
 
 **Tutoriales:** la dueña inicia carga multipart a R2, puede pausar y retomar partes, y publica el documento `videos` con portada. La colección `media` guarda sus claves de R2. No se borran por la regla de 72 horas; sólo al eliminar el tutorial.
 
-**Avisos PWA:** el service worker generado en `build-app.mjs` muestra el aviso y abre `/envios?tab=recepcion&site=…&shipment=…`. El dispositivo se suscribe explícitamente desde «Activar avisos para…». `pushSubscriptions.entity` cambia con el selector. `VAPID_PRIVATE_KEY` sólo vive en Functions. La pantalla Bot WhatsApp no participa en estos flujos.
+**Avisos PWA:** el service worker generado en `build-app.mjs` muestra el aviso y abre `/envios?tab=recepcion&site=…&shipment=…`. Al abrir la aplicación se ofrece activar avisos para la entidad seleccionada; el permiso del navegador se pide al tocar el botón. Si ya existe permiso, la suscripción se prepara al inicio. «Activar avisos para…» permite reintentar. `pushSubscriptions.entity` cambia con el selector. `VAPID_PRIVATE_KEY` sólo vive en Functions. La pantalla Bot WhatsApp no participa en estos flujos.
 
 ## Dónde se guarda cada cosa
 
 | Colección/servicio | Contenido |
 | --- | --- |
 | `shipments` | Origen, destino, estado, fechas, observaciones, referencias y duración de audio. |
-| `users` | Usuarias editables con ID estable y estado activo/eliminado. Las cinco sedes están en código. |
+| `users` | Usuarias editables sólo desde una sesión de dueña, con ID estable y estado activo/eliminado. Las cinco sedes están en código. |
 | `media` | Estado de carga, tipo, clave privada R2, vínculo y caducidad. |
 | `videos` | Tutoriales publicados, categoría, descripción y portada. |
 | `pushSubscriptions` | Endpoint y claves públicas del dispositivo asociados a un destino. |

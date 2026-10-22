@@ -36,3 +36,43 @@
 .voice-stop{width:100%;margin-top:8px}
 .voice-preview audio{display:block;width:100%;margin:12px 0}
 @media(max-width:370px){.site-control button span{display:none}.voice-composer .recording-state canvas{width:38px}}
+
+/* Espacio de trabajo adaptable para tableta y navegador de escritorio. */
+@media(min-width:481px){
+  .studio{display:block;max-width:none;padding:12px;background:var(--bg)}
+  .intro{display:none}
+  .device{width:100%;max-width:none;height:calc(100dvh - 24px);min-height:0;margin:0;border:0;border-radius:18px;box-shadow:none}
+  .device header{padding:18px clamp(20px,4vw,60px) 14px}
+  .site-strip{padding:0 clamp(20px,4vw,60px) 16px}
+  .site-strip label{font-size:12px}
+  .site-control{max-width:760px}
+  .site-control select{font-size:14px}
+  .site-control button{font-size:13px}
+  main{width:min(100%,1400px);margin:0 auto;padding:28px clamp(20px,4vw,60px) 50px}
+  dialog{max-width:620px}
+  .notice-toggle{width:auto;padding-inline:18px;font-size:13px}
+  .video-grid{grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px}
+  .video-thumb{height:150px}
+}
+@media(min-width:650px){
+  .device header{order:0}
+  .device nav{order:1;height:auto;min-height:64px;justify-content:flex-start;gap:8px;padding:7px clamp(20px,4vw,60px);border-top:0;border-bottom:1px solid var(--line)}
+  .device nav button{flex-direction:row;gap:9px;min-width:120px;padding:8px 14px;border-radius:10px;font-size:13px}
+  .device nav button.active{background:#b88bdd20}
+  .device .site-strip{order:2}
+  .device #connection,.device #update{order:3}
+  .device main{order:4}
+  #toast{left:auto;right:24px;bottom:24px;min-width:260px;max-width:420px}
+}
+@media(min-width:900px){
+  main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:16px;align-content:start}
+  main > :not(.card){grid-column:1/-1}
+  main > .card{min-width:0;margin-bottom:16px}
+  .stats{max-width:700px}
+}
+@media(min-width:1100px){
+  .studio{padding:0}
+  .device{height:100dvh;border-radius:0}
+  main{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:20px}
+  .video-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}

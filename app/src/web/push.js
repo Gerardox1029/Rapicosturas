@@ -4,7 +4,7 @@ function keyBytes(key){const padded=key+'='.repeat((4-key.length%4)%4),bytes=ato
 export function pushSupported(){return !demo&&'serviceWorker'in navigator&&'PushManager'in window&&'Notification'in window;}
 export async function activatePush(entity){
  if(!pushSupported())throw Error('Este navegador no admite avisos PWA.');
- const permission=await Notification.requestPermission();if(permission!=='granted')throw Error('No se concedió permiso para mostrar avisos.');
+ const permission=Notification.permission==='granted'?'granted':await Notification.requestPermission();if(permission!=='granted')throw Error('No se concedió permiso para mostrar avisos.');
  const config=await request('/push/config');if(!config.enabled)throw Error('Los avisos aún necesitan las claves VAPID en Netlify.');
  const registration=await navigator.serviceWorker.ready;
  let subscription=await registration.pushManager.getSubscription();

@@ -14,7 +14,7 @@ Los iconos son SVG lineales locales de trazo 1.6 px. No se usa color como única
 
 El patrón tiene círculos táctiles pequeños en una matriz 3×3; no debe ampliarse el área sensible a toda la celda cuadrada. Las diagonales se detectan geométricamente y la guía de trazo ayuda a confirmar el recorrido. Es accesible con teclado además de tacto.
 
-En escritorio hay una composición editorial y marco móvil de 440 px. En pantallas de hasta 480 px la aplicación ocupa 100dvh y respeta los márgenes seguros. Ese marco es de presentación, no parte de la navegación móvil.
+En escritorio la aplicación aprovecha el ancho del navegador, con navegación horizontal, tarjetas en columnas y grilla amplia de videos. En tableta usa el ancho disponible; en pantallas de hasta 480 px ocupa 100dvh y respeta los márgenes seguros.
 
 ## Ajustes V2 para integración
 
@@ -26,7 +26,7 @@ Error del patrón: rojo `#FF6E80`, fondo `#6A273D`, sacudida breve y reinicio tr
 
 ## Ajustes V3 para integración
 
-El selector «Sede de trabajo / Usuario» ocupa el ancho completo del marco; a la derecha lleva el botón ✏️ Editar usuarios. Las sedes conservan su nombre corto y las usuarias se presentan como «Soy [nombre]». El título de la bandeja repite esa identidad. El conmutador de recepción y envío se ve en ambos modos.
+El selector «Sede de trabajo / Usuario» ocupa el ancho disponible; a la derecha lleva el botón ✏️ Editar usuarios sólo en modo dueña. Las sedes conservan su nombre corto y las usuarias se presentan como «Soy [nombre]». El título de la bandeja repite esa identidad. El conmutador de recepción y envío se ve en ambos modos.
 
 Descripción/observación y audio comparten una barra redondeada. Campo `#242831`, borde `#555967`, texto claro y micrófono circular rosa `#CB6688` de 54 px. Al grabar, el campo se sustituye por contador, punto rojo, onda y guía para cancelar deslizando a la izquierda; deslizar arriba bloquea. El estilo toma únicamente la composición de la referencia de WhatsApp, sin copiar sus marcas. La grabación se puede reproducir y eliminar antes de enviar.
 

@@ -5,7 +5,7 @@ Fuente: `../../cambiosV3.md` y la aclaración posterior del usuario. La aclaraci
 ## Entidades y bandejas
 
 - El selector principal dice «Sede de trabajo / Usuario» y cambia la bandeja al instante. Contiene cinco sedes fijas y usuarias administrables, con Yesenia y Yolanda iniciales.
-- «Editar usuarios» permite crear, cambiar nombre y eliminar con confirmación. Los identificadores no cambian al renombrar. No se puede eliminar una usuaria con envíos en camino. Las sedes nunca se editan.
+- «Editar usuarios» aparece sólo en modo dueña; la API también exige esa sesión para crear, cambiar nombre o eliminar. Los identificadores no cambian al renombrar. No se puede eliminar una usuaria con envíos en camino. Las sedes nunca se editan.
 - Una sede o usuaria puede ser origen o destino. La API valida que ambas estén activas al registrar y que sean diferentes. Sólo el origen elegido puede editar o eliminar; sólo el destino elegido confirma la recepción.
 - Recepción y Envíos comparten pantalla y conmutador, también en modo dueña. El filtro «Todas las sedes» reúne sedes y usuarias. Los chips de estado conservan el desplazamiento al cambiar.
 - El modo dueña conserva el patrón N y su cambio desde el avatar. En la vista trabajadora el menú tiene «Cambiar sede / usuario» y «Modo dueña».
@@ -22,7 +22,8 @@ La selección de sede o usuaria sigue siendo libre y **no autentica a una person
 ## Avisos PWA
 
 - Tras crear un envío, la API intenta enviar Web Push sólo a las suscripciones vinculadas a su destino. Si falla el servicio de avisos, el envío permanece guardado.
-- Cada dispositivo pide permiso al pulsar «Activar avisos para…». Cambiar de sede/usuaria reasigna su suscripción; salir hacia «Todas las sedes» la retira. Un aviso abre `/envios?tab=recepcion` con el destino y el envío.
+- Al abrir la aplicación se ofrece activar los avisos para la entidad seleccionada; el permiso del navegador se solicita al tocar «Activar avisos». Con permiso ya concedido, la suscripción se prepara automáticamente. «Activar avisos para…» permanece como opción de reintento. Cambiar de sede/usuaria reasigna la suscripción; salir hacia «Todas las sedes» la retira. Un aviso abre `/envios?tab=recepcion` con el destino y el envío.
+- El menú del perfil recupera «Instalar app»; usa el diálogo nativo de instalación si existe y muestra instrucciones cuando el navegador no lo ofrece.
 - Las notificaciones del sistema admiten título, texto e icono, pero no texto enriquecido en negrita. La aplicación usa título claro, nombre del remitente y emojis.
 - Para activar Web Push en producción, copiar `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` y `VAPID_SUBJECT` del `.env` local ignorado por Git a las variables de Netlify con alcance Functions y desplegar de nuevo. La clave privada no debe publicarse ni regenerarse después de que los dispositivos se suscriban.
 - El dispositivo necesita HTTPS, compatibilidad con Push y permiso de notificaciones. La entrega también depende de su conexión y del servicio de notificaciones del navegador; no sustituye la bandeja compartida.
