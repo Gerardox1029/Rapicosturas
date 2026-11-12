@@ -11,7 +11,8 @@ const exampleShipments=[
 ];
 let demoShipments=exampleShipments;
 let demoUsers=structuredClone(DEFAULT_USERS);
-const demoVideos=CATEGORIES.map((c,i)=>({id:`demo-video-${i}`,title:['Recibir y revisar una prenda','Preparar un acabado limpio','Revisar las puntadas','Preparar un paquete'][i],category:c.id,description:'Recurso visual de ejemplo para revisar la presentación del taller.',sample:true,sizeBytes:0}));
+let demoCategories=structuredClone(CATEGORIES);
+const demoVideos=CATEGORIES.map((c,i)=>({id:`demo-video-${i}`,title:['Preparar un acabado limpio','Revisar las puntadas'][i],category:c.id,description:'Recurso visual de ejemplo para revisar la presentación del taller.',sample:true,sizeBytes:0,tags:[],revision:0}));
 export async function request(path,{method='GET',body}={}){
   if(demo)return demoRequest(path,method,body);
   const response=await fetch(`/api/v1${path}`,{method,credentials:'same-origin',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined,cache:'no-store'});
@@ -36,7 +37,10 @@ async function demoRequest(path,method,body){
   if(p.startsWith('/shipments/')&&method==='GET')return demoShipments.find(s=>s.id===p.split('/')[2]);
   if(p.endsWith('/receipt')){const item=demoShipments.find(s=>s.id===p.split('/')[2]);Object.assign(item,{status:'received',receivedAt:body.receivedAt,receiptNote:body.note,receiptEvidenceId:body.evidence?.id,receiptAudioId:body.audio?.id,evidenceExpiresAt:new Date(Date.now()+72*3600000).toISOString()});return item;}
   if(p==='/videos'&&method==='GET')return {items:demoVideos};
+  if(p==='/categories'&&method==='GET')return {items:demoCategories};
+  if(p==='/categories'&&method==='POST'){if(!demoOwner)throw Error('Abre el modo dueña para realizar esta acción.');const item={id:'category-'+crypto.randomUUID(),name:body.name};demoCategories.push(item);return item;}
   if(p==='/videos'&&method==='POST'){const v={...body,id:`VID-${Date.now()}`,mediaId:body.media.id,thumbnailURL:demoMedia.get(body.thumbnail?.id)?.url};demoVideos.unshift(v);return v;}
+  if(p.startsWith('/videos/')&&method==='PATCH'){if(!demoOwner)throw Error('Abre el modo dueña para realizar esta acción.');const v=demoVideos.find(v=>v.id===p.split('/')[2]);if(!v)throw Error('Video no encontrado.');Object.assign(v,body,{revision:(v.revision||0)+1});return v;}
   if(p.startsWith('/videos/')&&method==='DELETE'){demoVideos.splice(demoVideos.findIndex(v=>v.id===p.split('/')[2]),1);return {ok:true};}
   if(p==='/videos/usage')return {usedBytes:0,referenceBytes:100_000_000_000};
   if(p.startsWith('/media/')&&p.endsWith('/url'))return (demoMedia.get(p.split('/')[2])||{url:null});

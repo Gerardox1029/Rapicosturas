@@ -2,7 +2,7 @@ import {randomUUID} from 'node:crypto';
 export const SITE_IDS=['dolores','siglo-xx','cerro-colorado','yanahuara','cayma'];
 export const SITE_NAMES={dolores:'Dolores','siglo-xx':'Siglo XX','cerro-colorado':'Cerro Colorado',yanahuara:'Yanahuara',cayma:'Cayma'};
 export const DEFAULT_USERS=[{id:'user-yesenia',name:'Yesenia'},{id:'user-yolanda',name:'Yolanda'}];
-export const CATEGORY_IDS=['recepcion','costura','calidad','entregas'];
+export const CATEGORY_IDS=['costura','calidad'];
 export const RETENTION_MS=72*60*60*1000;
 export const SHIPMENT_RETENTION_MS=72*60*60*1000;
 export const PART_SIZE=8*1024*1024;
@@ -23,4 +23,5 @@ export function evidenceExpiry(confirmedAt){return new Date(new Date(confirmedAt
 export function shipmentInput(body){const origin=site(body.origin),destination=site(body.destination);ensure(origin!==destination,400,'Origen y destino deben ser distintos.');ensure(['package','work'].includes(body.type),400,'Selecciona Encargo o Trabajo.');return {requestId:requestId(body.requestId),origin,destination,type:body.type,description:text(body.description,'Descripción',500,{optional:true}),shipmentAt:iso(body.shipmentAt,'Fecha de envío')};}
 export function receiptInput(body,shipment){ensure(site(body.site)===shipment.destination,403,'Sólo el destino puede confirmar la recepción.');const receivedAt=iso(body.receivedAt,'Fecha de recepción');ensure(Date.parse(receivedAt)>=Date.parse(shipment.shipmentAt),400,'La recepción no puede ser anterior al envío.');return {receivedAt,receiptNote:text(body.note,'Observación',500,{optional:true})};}
 export function canSeeShipment(s,selectedSite,owner){return owner||s.origin===selectedSite||s.destination===selectedSite;}
-export function videoInput(body){ensure(CATEGORY_IDS.includes(body.category),400,'Categoría inválida.');return {requestId:requestId(body.requestId),title:text(body.title,'Título',100),description:text(body.description,'Descripción',700,{optional:true}),category:body.category};}
+export function videoMetadata(body,categoryIds=CATEGORY_IDS){ensure(categoryIds.includes(body.category),400,'Categoría inválida.');ensure(body.tags===undefined||Array.isArray(body.tags)&&body.tags.length<=10,400,'Añade como máximo 10 etiquetas.');const tags=(body.tags||[]).map(tag=>text(tag,'Etiqueta',30));ensure(new Set(tags.map(tag=>tag.toLocaleLowerCase('es'))).size===tags.length,400,'No repitas etiquetas.');return {title:text(body.title,'Título',100),description:text(body.description,'Descripción',700,{optional:true}),category:body.category,tags};}
+export function videoInput(body,categoryIds=CATEGORY_IDS){return {requestId:requestId(body.requestId),...videoMetadata(body,categoryIds)};}

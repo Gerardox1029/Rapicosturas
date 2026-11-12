@@ -4,7 +4,9 @@ let users=DEFAULT_USERS;
 export function setUsers(value){users=Array.isArray(value)?value:DEFAULT_USERS;}
 export function entities(){return [...SITES,...users];}
 export function userEntity(id){return users.find(u=>u.id===id);}
-export const CATEGORIES=[{id:'recepcion',name:'Recibir prendas'},{id:'costura',name:'Costura y acabados'},{id:'calidad',name:'Revisar la calidad'},{id:'entregas',name:'Empaque y entregas'}];
+export const CATEGORIES=[{id:'costura',name:'Costura y Acabados'},{id:'calidad',name:'Payempresa'}];
+// Nombres de videos publicados antes del cambio; no aparecen como opciones por defecto.
+export const LEGACY_CATEGORIES=[{id:'recepcion',name:'App envíos/recepción'},{id:'entregas',name:'Empaque y entregas'}];
 export const GB=1_000_000_000;
 export function storageAlerts(bytes){return [10,50,80].filter(n=>bytes>=n*GB).map(n=>({threshold:n,text:`Has alcanzado ${n} GB de los 100 GB de referencia para videos.`}));}
 export function siteName(id,short=false){const s=SITES.find(s=>s.id===id);if(s)return s[short?'short':'name'];const u=userEntity(id);return u?`Soy ${u.name}`:'Entidad no disponible';}
