@@ -11,7 +11,5 @@ export const GB=1_000_000_000;
 export function storageAlerts(bytes){return [10,50,80].filter(n=>bytes>=n*GB).map(n=>({threshold:n,text:`Has alcanzado ${n} GB de los 100 GB de referencia para videos.`}));}
 export function siteName(id,short=false){const s=SITES.find(s=>s.id===id);if(s)return s[short?'short':'name'];const u=userEntity(id);return u?`Soy ${u.name}`:'Entidad no disponible';}
 export function escapeHTML(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-export function localFields(iso=new Date().toISOString()){const parts=new Intl.DateTimeFormat('sv-SE',{timeZone:'America/Lima',year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hourCycle:'h23'}).formatToParts(new Date(iso));const at=k=>parts.find(p=>p.type===k).value;return {date:`${at('year')}-${at('month')}-${at('day')}`,time:`${at('hour')}:${at('minute')}`};}
 export function dateLabel(iso){return iso?new Intl.DateTimeFormat('es-PE',{timeZone:'America/Lima',day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'}).format(new Date(iso)):'Por confirmar';}
-export function toISO(date,time){const d=new Date(`${date}T${time}:00-05:00`);if(!date||!time||!Number.isFinite(+d))throw Error('Completa una fecha y hora válidas.');return d.toISOString();}
 export function filterShipments(records,{site='all',mode='send',owner=false,status='all'}={}){return records.filter(r=>(site==='all'&&owner||(mode==='send'?r.origin===site:r.destination===site))&&(status==='all'||r.status===status));}

@@ -31,11 +31,14 @@ async function demoRequest(path,method,body){
   if(p.startsWith('/users/')&&method==='DELETE'){const id=p.split('/')[2];if(demoShipments.some(s=>s.status==='transit'&&(s.origin===id||s.destination===id)))throw Error('Termina sus envíos en camino antes de eliminarla.');demoUsers=demoUsers.filter(u=>u.id!==id);return {ok:true};}
   if(p==='/push/config')return {enabled:false,publicKey:null};
   if(p==='/shipments'&&method==='GET')return {items:demoShipments};
-  if(p==='/shipments'&&method==='POST'){const item={...body,evidenceId:body.evidence?.id,audioId:body.audio?.id,revision:0,id:`RC-${Date.now().toString(36).toUpperCase()}`,title:body.description||'Encargo entre sedes',status:'transit',createdAt:new Date().toISOString()};demoShipments=[item,...demoShipments];return item;}
+  if(p==='/shipments'&&method==='POST'){const createdAt=new Date().toISOString();const item={...body,shipmentAt:body.shipmentAt??createdAt,evidenceId:body.evidence?.id,audioId:body.audio?.id,revision:0,id:`RC-${Date.now().toString(36).toUpperCase()}`,title:body.description||'Encargo entre sedes',status:'transit',createdAt};demoShipments=[item,...demoShipments];return item;}
   if(p.startsWith('/shipments/')&&method==='DELETE'){demoShipments=demoShipments.filter(s=>s.id!==p.split('/')[2]);return {ok:true};}
   if(p.startsWith('/shipments/')&&method==='PATCH'){const s=demoShipments.find(s=>s.id===p.split('/')[2]);Object.assign(s,body,{title:body.description||s.title,revision:(s.revision||0)+1});return s;}
   if(p.startsWith('/shipments/')&&method==='GET')return demoShipments.find(s=>s.id===p.split('/')[2]);
-  if(p.endsWith('/receipt')){const item=demoShipments.find(s=>s.id===p.split('/')[2]);Object.assign(item,{status:'received',receivedAt:body.receivedAt,receiptNote:body.note,receiptEvidenceId:body.evidence?.id,receiptAudioId:body.audio?.id,evidenceExpiresAt:new Date(Date.now()+72*3600000).toISOString()});return item;}
+  if(p.endsWith('/receipt')){const item=demoShipments.find(s=>s.id===p.split('/')[2]);if(!item||demoOwner||body.site!==item.destination)throw Error('Sólo el destino puede confirmar la recepción.');
+    if(item.status==='received')return item;
+    const confirmedAt=new Date();
+    Object.assign(item,{status:'received',confirmedAt:confirmedAt.toISOString(),receivedAt:body.receivedAt??confirmedAt.toISOString(),receiptNote:body.note,receiptEvidenceId:body.evidence?.id,receiptAudioId:body.audio?.id,evidenceExpiresAt:new Date(+confirmedAt+72*3600000).toISOString()});return item;}
   if(p==='/videos'&&method==='GET')return {items:demoVideos};
   if(p==='/categories'&&method==='GET')return {items:demoCategories};
   if(p==='/categories'&&method==='POST'){if(!demoOwner)throw Error('Abre el modo dueña para realizar esta acción.');const item={id:'category-'+crypto.randomUUID(),name:body.name};demoCategories.push(item);return item;}
